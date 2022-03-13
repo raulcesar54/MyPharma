@@ -61,23 +61,23 @@ export const ProductController = {
   //     return response.status(400).json({ message: err, done: false })
   //   }
   // },
-  // delete: async (request: Request, response: Response) => {
-  //   try {
-  //     const {
-  //       params: { id },
-  //     } = request
-  //     const findAndRemoveItem = await ProductsCategoryModel.findOneAndDelete({
-  //       id,
-  //     })
-  //     if (!findAndRemoveItem) throw 'Id not exist!'
-  //     return response.json({
-  //       message: 'Item deleted sucessfull!',
-  //       done: true,
-  //     })
-  //   } catch (err) {
-  //     return response.status(400).json({ message: err, done: false })
-  //   }
-  // },
+  delete: async (request: Request, response: Response) => {
+    try {
+      const {
+        params: { id },
+      } = request
+      const findAndRemoveItem = await ProductsModel.findOneAndDelete({
+        id,
+      })
+      if (!findAndRemoveItem) throw 'Id not exist!'
+      return response.json({
+        message: 'Item deleted sucessfull!',
+        done: true,
+      })
+    } catch (err) {
+      return response.status(400).json({ message: err, done: false })
+    }
+  },
   list: async (request: Request, response: Response) => {
     const {
       query: { search, name, description },
@@ -110,16 +110,22 @@ export const ProductController = {
           { description: { $regex: `.*${search}.*` } },
         ],
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
     if (name !== 'undefined') {
       return await ProductsModel.find({
         name: { $regex: `.*${name}.*` },
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
     if (description !== 'undefined') {
       return await ProductsModel.find({
         description: { $regex: `.*${description}.*`, $options: 'i' },
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
     return await ProductsModel.find()
       .populate('productsCategory')
