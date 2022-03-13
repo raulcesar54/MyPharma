@@ -35,14 +35,14 @@ export const MarkController = {
       } = request
 
       const findById = await MarkModel.findOneAndUpdate(
-        { id },
+        { _id: id },
         {
           name,
         }
       )
 
       if (!findById) throw 'Id not exist!'
-      const findItem = await MarkModel.findOne({ id })
+      const findItem = await MarkModel.findOne({ _id: id })
 
       return response.json({
         message: 'Mark updated sucessfull!',
@@ -59,7 +59,7 @@ export const MarkController = {
         params: { id },
       } = request
       const findAndRemoveItem = await MarkModel.findOneAndDelete({
-        id,
+        _id: id,
       })
       if (!findAndRemoveItem) throw 'Id not exist!'
       return response.json({
