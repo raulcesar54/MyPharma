@@ -34,40 +34,44 @@ export const ProductController = {
       return response.status(400).json({ message: err, done: false })
     }
   },
-  // update: async (request: Request, response: Response) => {
-  //   try {
-  //     const {
-  //       body: { name, description },
-  //       params: { id },
-  //     } = request
+  update: async (request: Request, response: Response) => {
+    try {
+      const {
+        body: { name, price, stock, productsCategory, mark, description },
+        params: { id },
+      } = request
 
-  //     const findById = await ProductsCategoryModel.findOneAndUpdate(
-  //       { id },
-  //       {
-  //         name,
-  //         description,
-  //       }
-  //     )
+      const findById = await ProductsModel.findOneAndUpdate(
+        { _id: id },
+        {
+          name,
+          price,
+          stock,
+          productsCategory,
+          mark,
+          description,
+        }
+      )
 
-  //     if (!findById) throw 'Id not exist!'
-  //     const findItem = await ProductsCategoryModel.findOne({ id })
+      if (!findById) throw 'Id not exist!'
+      const findItem = await ProductsModel.findOne({ _id: id })
 
-  //     return response.json({
-  //       message: 'Item updated sucessfull!',
-  //       done: true,
-  //       data: findItem,
-  //     })
-  //   } catch (err) {
-  //     return response.status(400).json({ message: err, done: false })
-  //   }
-  // },
+      return response.json({
+        message: 'Item updated sucessfull!',
+        done: true,
+        data: findItem,
+      })
+    } catch (err) {
+      return response.status(400).json({ message: err, done: false })
+    }
+  },
   delete: async (request: Request, response: Response) => {
     try {
       const {
         params: { id },
       } = request
       const findAndRemoveItem = await ProductsModel.findOneAndDelete({
-        _id: id,
+        id: id,
       })
       if (!findAndRemoveItem) throw 'Id not exist!'
       return response.json({
