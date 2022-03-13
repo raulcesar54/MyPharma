@@ -13,6 +13,7 @@ export const CategoryProductController = {
 
       const insertItems = new ProductsCategoryModel({ name, description })
       await insertItems.save()
+
       return response.json({
         message: 'New item inserted sucessfull!',
         done: true,
@@ -66,5 +67,49 @@ export const CategoryProductController = {
       return response.status(400).json({ message: err, done: false })
     }
   },
-  list: async (request: Request, response: Response) => {},
+  list: async (request: Request, response: Response) => {
+    const {
+      query: { search, name, description },
+    } = request
+    const data = await CategoryProductController.filter({
+      search: String(search),
+      name: String(name),
+      description: String(description),
+    })
+
+    return response.json({
+      done: true,
+      qty: data.length,
+      data,
+    })
+  },
+  filter: async ({
+    search,
+    name,
+    description,
+  }: {
+    search?: string
+    name?: string
+    description?: string
+  }) => {
+    if (search != 'undefined') {
+      return await ProductsCategoryModel.find({
+        $or: [
+          { name: { $regex: `.*${search}.*` } },
+          { description: { $regex: `.*${search}.*` } },
+        ],
+      })
+    }
+    if (name !== 'undefined') {
+      return await ProductsCategoryModel.find({
+        name: { $regex: `.*${name}.*` },
+      })
+    }
+    if (description !== 'undefined') {
+      return await ProductsCategoryModel.find({
+        description: { $regex: `.*${description}.*`, $options: 'i' },
+      })
+    }
+    return await ProductsCategoryModel.find()
+  },
 }
