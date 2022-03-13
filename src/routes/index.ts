@@ -8,6 +8,8 @@ import { AuthMiddleware } from '../middleware/auth'
 const route = express.Router()
 
 route.post('/mark', AuthMiddleware, MarkController.insert)
+route.get('/mark', AuthMiddleware, MarkController.list)
+
 route.get('/product/category', AuthMiddleware, CategoryProductController.list)
 route.post(
   '/product/category',

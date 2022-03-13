@@ -70,49 +70,17 @@ export const MarkController = {
   //     return response.status(400).json({ message: err, done: false })
   //   }
   // },
-  // list: async (request: Request, response: Response) => {
-  //   const {
-  //     query: { search, name, description },
-  //   } = request
-  //   const data = await CategoryProductController.filter({
-  //     search: String(search),
-  //     name: String(name),
-  //     description: String(description),
-  //   })
-
-  //   return response.json({
-  //     done: true,
-  //     qty: data.length,
-  //     data,
-  //   })
-  // },
-  // filter: async ({
-  //   search,
-  //   name,
-  //   description,
-  // }: {
-  //   search?: string
-  //   name?: string
-  //   description?: string
-  // }) => {
-  //   if (search != 'undefined') {
-  //     return await ProductsCategoryModel.find({
-  //       $or: [
-  //         { name: { $regex: `.*${search}.*` } },
-  //         { description: { $regex: `.*${search}.*` } },
-  //       ],
-  //     })
-  //   }
-  //   if (name !== 'undefined') {
-  //     return await ProductsCategoryModel.find({
-  //       name: { $regex: `.*${name}.*` },
-  //     })
-  //   }
-  //   if (description !== 'undefined') {
-  //     return await ProductsCategoryModel.find({
-  //       description: { $regex: `.*${description}.*`, $options: 'i' },
-  //     })
-  //   }
-  //   return await ProductsCategoryModel.find()
-  // },
+  list: async (request: Request, response: Response) => {
+    const {
+      query: { search },
+    } = request
+    const data = await MarkModel.find(
+      search ? { name: { $regex: `.*${search}.*`, $options: 'i' } } : {}
+    )
+    return response.json({
+      done: true,
+      qty: data.length,
+      data,
+    })
+  },
 }
