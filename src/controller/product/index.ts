@@ -5,13 +5,13 @@ export const ProductController = {
   insert: async (request: Request, response: Response) => {
     try {
       const {
-        body: { name, price, stock, category, mark, description },
+        body: { name, price, stock, productsCategory, mark, description },
       } = request
 
       if (!name) throw 'Name is required!'
       if (!price) throw 'Price is required!'
       if (!stock) throw 'Stock is required!'
-      if (!category) throw 'Category is required!'
+      if (!productsCategory) throw 'Category is required!'
       if (!mark) throw 'Mark is required!'
       if (!description) throw 'Description is required!'
 
@@ -19,7 +19,7 @@ export const ProductController = {
         name,
         price,
         stock,
-        category,
+        productsCategory,
         mark,
         description,
       })
@@ -122,5 +122,7 @@ export const ProductController = {
       })
     }
     return await ProductsModel.find()
+      .populate('productsCategory')
+      .populate('mark')
   },
 }
