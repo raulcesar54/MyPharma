@@ -6,8 +6,8 @@ const schema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   stock: { type: Number, required: true },
-  category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'productsCategory' }],
-  mark: [{ type: mongoose.Schema.Types.ObjectId, ref: 'mark' }],
+  category: [{ type: String, ref: 'productsCategory' }],
+  mark: [{ type: String, ref: 'mark' }],
   description: { type: String, required: true },
 })
 
