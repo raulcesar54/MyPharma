@@ -31,7 +31,7 @@ export const CategoryProductController = {
       } = request
 
       const findById = await ProductsCategoryModel.findOneAndUpdate(
-        { id },
+        { _id: id },
         {
           name,
           description,
@@ -39,7 +39,7 @@ export const CategoryProductController = {
       )
 
       if (!findById) throw 'Id not exist!'
-      const findItem = await ProductsCategoryModel.findOne({ id })
+      const findItem = await ProductsCategoryModel.findOne({ _id: id })
 
       return response.json({
         message: 'Item updated sucessfull!',
@@ -56,7 +56,7 @@ export const CategoryProductController = {
         params: { id },
       } = request
       const findAndRemoveItem = await ProductsCategoryModel.findOneAndDelete({
-        id,
+        _id: id,
       })
       if (!findAndRemoveItem) throw 'Id not exist!'
       return response.json({

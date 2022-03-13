@@ -67,7 +67,7 @@ export const ProductController = {
         params: { id },
       } = request
       const findAndRemoveItem = await ProductsModel.findOneAndDelete({
-        id,
+        _id: id,
       })
       if (!findAndRemoveItem) throw 'Id not exist!'
       return response.json({

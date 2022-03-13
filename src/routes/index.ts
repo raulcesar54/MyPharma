@@ -15,6 +15,7 @@ route.put('/mark/:id', AuthMiddleware, MarkController.update)
 
 route.post('/product', AuthMiddleware, ProductController.insert)
 route.get('/product', AuthMiddleware, ProductController.list)
+route.delete('/product/:id', AuthMiddleware, ProductController.delete)
 
 route.get('/product/category', AuthMiddleware, CategoryProductController.list)
 route.post(

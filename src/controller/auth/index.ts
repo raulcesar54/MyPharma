@@ -23,7 +23,7 @@ export const AuthController = {
       }
 
       const token = jwt.sign(
-        { id: user.id, email },
+        { id: user._id, email },
         'LKABDFBAISDFYWEQNR241985Y19HWSFN91N',
         { expiresIn: '1d' }
       )
@@ -32,7 +32,7 @@ export const AuthController = {
         done: true,
         data: {
           user: {
-            id: user.id,
+            id: user._id,
             email,
           },
           token,
