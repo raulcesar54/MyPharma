@@ -53,23 +53,23 @@ export const MarkController = {
       return response.status(400).json({ message: err, done: false })
     }
   },
-  // delete: async (request: Request, response: Response) => {
-  //   try {
-  //     const {
-  //       params: { id },
-  //     } = request
-  //     const findAndRemoveItem = await ProductsCategoryModel.findOneAndDelete({
-  //       id,
-  //     })
-  //     if (!findAndRemoveItem) throw 'Id not exist!'
-  //     return response.json({
-  //       message: 'Item deleted sucessfull!',
-  //       done: true,
-  //     })
-  //   } catch (err) {
-  //     return response.status(400).json({ message: err, done: false })
-  //   }
-  // },
+  delete: async (request: Request, response: Response) => {
+    try {
+      const {
+        params: { id },
+      } = request
+      const findAndRemoveItem = await MarkModel.findOneAndDelete({
+        id,
+      })
+      if (!findAndRemoveItem) throw 'Id not exist!'
+      return response.json({
+        message: 'Mark deleted sucessfull!',
+        done: true,
+      })
+    } catch (err) {
+      return response.status(400).json({ message: err, done: false })
+    }
+  },
   list: async (request: Request, response: Response) => {
     const {
       query: { search },
