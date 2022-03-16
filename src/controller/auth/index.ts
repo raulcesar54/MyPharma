@@ -13,6 +13,7 @@ export const AuthController = {
       if (!password) throw 'Passowrd is required!'
 
       const user = await UserModel.findOne({ email })
+      console.log(user)
       if (!user) throw 'User not exists!'
 
       const isValidPassword = await bcrypt.compare(password, user.password)
