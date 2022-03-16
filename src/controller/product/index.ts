@@ -1,17 +1,28 @@
 import { Request, Response } from 'express'
-import { ProductsCategoryModel } from '../../model/productsCategory'
+import { ProductsModel } from '../../model/products'
 
-export const CategoryProductController = {
+export const ProductController = {
   insert: async (request: Request, response: Response) => {
     try {
       const {
-        body: { name, description },
+        body: { name, price, stock, productsCategory, mark, description },
       } = request
 
       if (!name) throw 'Name is required!'
+      if (!price) throw 'Price is required!'
+      if (!stock) throw 'Stock is required!'
+      if (!productsCategory) throw 'Category is required!'
+      if (!mark) throw 'Mark is required!'
       if (!description) throw 'Description is required!'
 
-      const insertItems = new ProductsCategoryModel({ name, description })
+      const insertItems = new ProductsModel({
+        name,
+        price,
+        stock,
+        productsCategory,
+        mark,
+        description,
+      })
       await insertItems.save()
 
       return response.json({
@@ -26,20 +37,24 @@ export const CategoryProductController = {
   update: async (request: Request, response: Response) => {
     try {
       const {
-        body: { name, description },
+        body: { name, price, stock, productsCategory, mark, description },
         params: { id },
       } = request
 
-      const findById = await ProductsCategoryModel.findOneAndUpdate(
+      const findById = await ProductsModel.findOneAndUpdate(
         { _id: id },
         {
           name,
+          price,
+          stock,
+          productsCategory,
+          mark,
           description,
         }
       )
 
       if (!findById) throw 'Id not exist!'
-      const findItem = await ProductsCategoryModel.findOne({ _id: id })
+      const findItem = await ProductsModel.findOne({ _id: id })
 
       return response.json({
         message: 'Item updated sucessfull!',
@@ -55,8 +70,8 @@ export const CategoryProductController = {
       const {
         params: { id },
       } = request
-      const findAndRemoveItem = await ProductsCategoryModel.findOneAndDelete({
-        _id: id,
+      const findAndRemoveItem = await ProductsModel.findOneAndDelete({
+        id: id,
       })
       if (!findAndRemoveItem) throw 'Id not exist!'
       return response.json({
@@ -71,7 +86,7 @@ export const CategoryProductController = {
     const {
       query: { search, name, description },
     } = request
-    const data = await CategoryProductController.filter({
+    const data = await ProductController.filter({
       search: String(search),
       name: String(name),
       description: String(description),
@@ -93,23 +108,31 @@ export const CategoryProductController = {
     description?: string
   }) => {
     if (search != 'undefined') {
-      return await ProductsCategoryModel.find({
+      return await ProductsModel.find({
         $or: [
           { name: { $regex: `.*${search}.*` } },
           { description: { $regex: `.*${search}.*` } },
         ],
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
     if (name !== 'undefined') {
-      return await ProductsCategoryModel.find({
+      return await ProductsModel.find({
         name: { $regex: `.*${name}.*` },
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
     if (description !== 'undefined') {
-      return await ProductsCategoryModel.find({
+      return await ProductsModel.find({
         description: { $regex: `.*${description}.*`, $options: 'i' },
       })
+        .populate('productsCategory')
+        .populate('mark')
     }
-    return await ProductsCategoryModel.find()
+    return await ProductsModel.find()
+      .populate('productsCategory')
+      .populate('mark')
   },
 }
